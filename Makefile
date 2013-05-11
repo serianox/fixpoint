@@ -4,8 +4,8 @@ sourcedir := sources
 includedir := includes
 builddir := .build
 
-CXXFLAGS := -I$(includedir) -MMD -MP -O3 -g -std=c++11 -Wall -Wextra -Werror -Wa,-a
-LDFLAGS :=
+CXXFLAGS += -I$(includedir) -MMD -MP -O3 -g -std=c++11 -Wall -Wextra -Werror -Wa,-a
+LDFLAGS +=
 MKDIR := mkdir -p
 
 sources := $(wildcard $(sourcedir)/*.cpp)
@@ -14,16 +14,22 @@ objects := $(patsubst $(sourcedir)/%.cpp, $(builddir)/%.o, $(sources))
 
 default: $(project)
 
+.PHONY: clean
+clean:
+	-$(RM) $(project) $(objects) $(dependencies)
+
 $(project): $(objects)
 	$(CXX) $(LDFLAGS) -o $@ $^
 
 $(builddir)/%.o: $(sourcedir)/%.cpp
-	$(MKDIR) $(dir $@) && \
+	@$(MKDIR) $(dir $@)
 	$(CXX) $(CXXFLAGS) -o $@ -c $< >$(basename $@).l
 
 $(objects): Makefile
 
-clean:
-	$(RM) $(project) $(objects) $(dependencies)
+Remram-happy:
+	@echo "(\ /)"
+	@echo "( . .)"
+	@echo "(\")(\")"
 
 -include $(dependencies)
